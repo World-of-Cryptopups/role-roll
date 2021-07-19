@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from src.commands import ROLL
+from src.roll.commands import ROLL
 
 # CREATE A NEW CLIENT
 intents = discord.Intents.default()

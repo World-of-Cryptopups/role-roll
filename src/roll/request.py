@@ -15,6 +15,7 @@ async def _fetch_request(url: str, session: ClientSession):
         return {"url": url, "response": d}
 
 
+# requester for dps calculation
 async def requester(owner: str):
     async with ClientSession() as session:
         return [await _fetch_request(i.format(owner=owner), session) for i in _urls]
