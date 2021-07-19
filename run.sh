@@ -1,0 +1,1 @@
+watchmedo auto-restart --directory=./ --patterns="*.py" --recursive -- python3 main.py
