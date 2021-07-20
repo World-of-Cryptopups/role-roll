@@ -8,7 +8,11 @@ from ..lib.redis import r
 
 
 async def REGISTER(owner: str, author: cached_property | Any):
-    # exists in set
+    # id exists
+    if r.exists(author.id) == 1:
+        return f"❗️ You have registered already an account! If you want to change please contact an admin."
+
+    # token exists in list
     if r.sismember("_tokens_list", owner):
         return f"❗️ Wax ID: **`{owner}`** was already registed. Please contact an admin if you did not register this account."
 
