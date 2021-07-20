@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
+from src.register.command import REGISTER
 from src.roll.commands import ROLL
 
 # CREATE A NEW CLIENT
@@ -24,6 +25,7 @@ async def hello(ctx: Context):
     )
 
 
+# >roll
 @client.command()
 async def roll(ctx: Context, name: Optional[str]):
     if not name:
@@ -36,3 +38,20 @@ async def roll(ctx: Context, name: Optional[str]):
     _message = await ROLL(_name, ctx.author)
 
     await ctx.send(f"<@!{ctx.author.id}>", embed=_message)
+
+
+# >register
+@client.command()
+async def register(ctx: Context, name: Optional[str]):
+    if not name:
+        await ctx.send(
+            "Please add your WAX ID to the command like: `>register mywax.wam`"
+        )
+        return
+
+    # strip name
+    _name = name.strip()
+
+    _message = await REGISTER(_name, ctx.author)
+
+    await ctx.send(_message)
