@@ -5,7 +5,7 @@ from typing import Any
 from discord import Embed
 from discord.utils import cached_property
 
-from .calc import calculateDPS, calculateItemsDPS
+from .dps import calculateDPS, calculateItemsDPS
 from .request import PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, requester
 
 

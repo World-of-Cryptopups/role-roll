@@ -55,3 +55,9 @@ async def register(ctx: Context, name: Optional[str]):
     _message = await REGISTER(_name, ctx.author)
 
     await ctx.send(_message)
+
+
+# >dps
+@client.command()
+async def dps(ctx: Context):
+    pass

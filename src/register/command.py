@@ -8,13 +8,18 @@ from ..lib.redis import r
 
 
 async def REGISTER(owner: str, author: cached_property | Any):
-    if r.exists(owner) == 1:
-        return f"❗️ Wax ID: **`{owner}`** has already been registered. Please contact an admin if you did not register this account."
+    # exists in set
+    if r.sismember("_tokens_list", owner):
+        return f"❗️ Wax ID: **`{owner}`** was already registed. Please contact an admin if you did not register this account."
 
+    # register waxid to set
+    r.sadd("_tokens_list", owner)
+
+    # register key
     r.hset(
-        name=owner,
+        name=author.id,
         mapping={
-            "discord_id": author.id,
+            "wax_id": owner,
             "verified": str(False),
         },
     )
