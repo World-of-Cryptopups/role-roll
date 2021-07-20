@@ -14,7 +14,7 @@ async def ROLL(owner: str, author: cached_property | Any):
     `>roll` command
     """
 
-    resps = await requester(owner)
+    resps = requester(owner)
 
     puppyCardsData = {}
     pupSkinsData = {}

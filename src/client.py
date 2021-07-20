@@ -34,12 +34,13 @@ async def roll(ctx: Context, name: Optional[str]):
         await ctx.send("Please add your WAX ID to the command like: `>roll mywax.wam`")
         return
 
+    msg: discord.Message = await ctx.send(f"Fetching DPS of **{name}**...")
+
     # remove spaces
     _name = name.strip()
-
     _message = await ROLL(_name, ctx.author)
 
-    await ctx.send(f"<@!{ctx.author.id}>", embed=_message)
+    await msg.edit(content=f"<@!{ctx.author.id}>", embed=_message)
 
 
 # >register
@@ -64,7 +65,10 @@ async def register(ctx: Context, name: Optional[str]):
 async def dps(ctx: Context):
     _message = await DPS(ctx.author)
 
-    await ctx.send(f"<@!{ctx.author.id}>", embed=_message)
+    msg: discord.Message = await ctx.send(
+        f"Fetching DPS stats of **<@!{ctx.author.id}>**..."
+    )
+    await msg.edit(content=f"<@!{ctx.author.id}>", embed=_message)
 
 
 # >me
