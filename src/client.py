@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
+from src.dps.command import DPS
 from src.register.command import REGISTER
 from src.roll.commands import ROLL
 
@@ -60,4 +61,6 @@ async def register(ctx: Context, name: Optional[str]):
 # >dps
 @client.command()
 async def dps(ctx: Context):
-    pass
+    _message = await DPS(ctx.author)
+
+    await ctx.send(f"<@!{ctx.author.id}>", embed=_message)
