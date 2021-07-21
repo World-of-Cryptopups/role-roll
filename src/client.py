@@ -45,17 +45,17 @@ async def roll(ctx: Context, name: Optional[str]):
 
 # >register
 @client.command()
-async def register(ctx: Context, name: Optional[str]):
-    if not name:
+async def register(ctx: Context, token: Optional[str]):
+    if not token:
         await ctx.send(
-            "Please add your WAX ID to the command like: `>register mywax.wam`"
+            "Please add your TOKEN ID to the command like: `>register given-token`. Please contact an admin if you are not sure what to do."
         )
         return
 
-    # strip name
-    _name = name.strip()
+    # strip token
+    _token = token.strip()
 
-    _message = await REGISTER(_name, ctx.author)
+    _message = await REGISTER(_token, ctx.author)
 
     await ctx.send(_message)
 

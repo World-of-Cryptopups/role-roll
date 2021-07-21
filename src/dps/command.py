@@ -13,7 +13,7 @@ async def DPS(author: cached_property | Any):
     >dps command
     """
 
-    if r.exists(author.id) == 0:
+    if r.exists(f"_id_{author.id}") == 0:
         return "You are not currently registered. Please register with the `>register` command and try again."
 
     _owner = r.hget(author.id, "wax_id")

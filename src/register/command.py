@@ -7,24 +7,25 @@ from discord.utils import cached_property
 from ..lib.redis import r
 
 
-async def REGISTER(owner: str, author: cached_property | Any):
+async def REGISTER(token: str, author: cached_property | Any):
     # id exists
-    if r.exists(author.id) == 1:
-        return f"❗️ You have registered already an account! If you want to change please contact an admin."
+    if r.exists(f"_id_{author.id}") == 1:
+        return f"❗️ You have registered already an account! If you want to change your **WAX ID** please contact an admin."
 
-    # token exists in list
-    if r.sismember("_tokens_list", owner):
-        return f"❗️ Wax ID: **`{owner}`** was already registed. Please contact an admin if you did not register this account."
+    # token already exists
+    if r.exists(token) == 0:
+        return f"⚠️ This token is not valid. Please contact an admin on how to get a valid token."
 
-    # register waxid to set
-    r.sadd("_tokens_list", owner)
+    # get wax id from data
+    _d = r.hgetall(token)
 
     # register key
     r.hset(
-        name=author.id,
+        name=f"_id_{author.id}",
         mapping={
-            "wax_id": owner,
-            "verified": str(False),
+            "wallet": _d["wallet"],
+            "type": _d["type"],
+            "verified": str(True),
         },
     )
-    return f"✅ Wax ID: **`{owner}`** is successfully registered by <@!{author.id}>"
+    return f"✅ <@!{author.id}>, You successfully registered. You can check your status with the command `>me`"
