@@ -6,19 +6,20 @@ from cachetools import TTLCache, cached
 from discord import Embed
 from discord.utils import cached_property
 
-from .dps import calculateDPS, calculateItemsDPS
-from .request import PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, requester
+from ..lib.redis import r
+from .dps import calculateDPS, calculateItemsDPS, getTrueDPS
+from .request import PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, _urls, requester
 
 
 # base dps calculation command
 # cache function response for 5 minutes, in order to avoid continous responses to the AtomicHub API
 @cached(cache=TTLCache(maxsize=128, ttl=300))
-def ROLL(owner: str, author: cached_property | Any):
+def ROLL(owner: str, author: cached_property | Any, auth: bool, trueDPS: str | None):
     """
     `>roll` command
     """
 
-    resps = requester(owner)
+    resps = requester(owner, _urls)
 
     puppyCardsData = {}
     pupSkinsData = {}
@@ -66,8 +67,18 @@ def ROLL(owner: str, author: cached_property | Any):
         value="{:,} DPS".format(pupItemsRealDPS),
         inline=True,
     )
+
     e.add_field(name="\u200b", value="\u200b", inline=False)
     e.add_field(name="🗡 TOTAL DPS", value="**{:,}**".format(totalDPS), inline=False)
+
+    # special (TRUE DPS) calculation
+    if not trueDPS:
+        trueDPS = str(getTrueDPS(owner))
+        if auth:
+            r.hset(f"_id_{author.id}", "trueDPS", trueDPS)
+
+    e.add_field(name="🛡 TRUE DPS", value="**{:,}**".format(int(trueDPS)), inline=False)
+
     e.set_footer(text="All Rights Reserved | World of Cryptopups")
 
     return e

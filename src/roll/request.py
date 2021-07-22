@@ -1,3 +1,5 @@
+from typing import List
+
 from requests import Session
 
 PUPSKINS_API = "https://wax.api.atomicassets.io/atomicassets/v1/assets?owner={owner}&collection_name=cryptopuppie&schema_name=pupskincards&page=1&limit=1000&order=desc&sort=asset_id"
@@ -20,6 +22,6 @@ def _fetch_request(url: str, session: Session):
 
 
 # requester for dps calculation
-def requester(owner: str):
+def requester(owner: str, urls: List[str]):
     with Session() as session:
-        return [_fetch_request(i.format(owner=owner), session) for i in _urls]
+        return [_fetch_request(i.format(owner=owner), session) for i in urls]

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from discord.utils import cached_property
+from src.roll.dps import getTrueDPS
 
 from ..lib.redis import r
 
@@ -19,6 +20,9 @@ def REGISTER(token: str, author: cached_property | Any):
     # get wax id from data
     _d = r.hgetall(token)
 
+    # fetch the true DPS upon register
+    _trueDPS = getTrueDPS(_d["wallet"])
+
     # register key
     r.hset(
         name=f"_id_{author.id}",
@@ -26,6 +30,7 @@ def REGISTER(token: str, author: cached_property | Any):
             "wallet": _d["wallet"],
             "type": _d["type"],
             "verified": str(True),
+            "trueDPS": str(_trueDPS),
         },
     )
     return f"✅ <@!{author.id}>, You successfully registered. You can check your status with the command `>me`"

@@ -46,7 +46,7 @@ async def roll(ctx: Context, name: Optional[str]):
     msg: discord.Message = await ctx.send(f"Fetching DPS of **{_name}**...")
 
     # execute function and get message
-    _message = ROLL(_name, ctx.author)
+    _message = ROLL(_name, ctx.author, False, None)
 
     # edit sent message and send it
     await msg.edit(content=f"<@!{ctx.author.id}>", embed=_message)
@@ -61,12 +61,14 @@ async def register(ctx: Context, token: Optional[str]):
         )
         return
 
+    m: discord.Message = await ctx.send(f"Registering <@!{ctx.author.id}>")
+
     # strip token
     _token = token.strip()
 
     _message = REGISTER(_token, ctx.author)
 
-    await ctx.send(_message)
+    await m.edit(content=_message)
 
 
 # >dps

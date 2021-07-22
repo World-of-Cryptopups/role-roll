@@ -22,6 +22,7 @@ def ME(author: cached_property | Any):
     _waxid = d["wallet"]
     _verified = d["verified"]
     _type = d["type"]
+    _trueDPS = d.get("trueDPS")
 
     _provider = ""
     if _type == "wax-cloud":
@@ -35,7 +36,13 @@ def ME(author: cached_property | Any):
 
     e.title = "Profile | World of Cryptopups"
     e.set_author(name=author.display_name, icon_url=author.avatar_url)
-    e.add_field(name="💳 WAX Wallet", value=_waxid, inline=True)
-    e.add_field(name="👥 Account Provider", value=_provider, inline=False)
-    e.add_field(name=f"{_v_title} Verified", value=_verified, inline=False)
+    e.add_field(name="💳 WAX Wallet", value=_waxid, inline=False)
+    e.add_field(name="👥 Account Provider", value=_provider, inline=True)
+    e.add_field(name=f"{_v_title} Verified", value=_verified, inline=True)
+
+    if _trueDPS:
+        e.add_field(
+            name="🛡 TRUE DPS", value="**{:,}**".format(int(_trueDPS)), inline=False
+        )
+
     return e
