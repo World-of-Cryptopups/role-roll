@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from cachetools import TTLCache, cached
 from discord import Embed
 from discord.utils import cached_property
 
@@ -9,7 +10,10 @@ from .dps import calculateDPS, calculateItemsDPS
 from .request import PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, requester
 
 
-async def ROLL(owner: str, author: cached_property | Any):
+# base dps calculation command
+# cache function response for 5 minutes, in order to avoid continous responses to the AtomicHub API
+@cached(cache=TTLCache(maxsize=128, ttl=300))
+def ROLL(owner: str, author: cached_property | Any):
     """
     `>roll` command
     """

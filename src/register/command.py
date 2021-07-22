@@ -7,7 +7,7 @@ from discord.utils import cached_property
 from ..lib.redis import r
 
 
-async def REGISTER(token: str, author: cached_property | Any):
+def REGISTER(token: str, author: cached_property | Any):
     # id exists
     if r.exists(f"_id_{author.id}") == 1:
         return f"❗️ You have registered already an account! If you want to change your **WAX ID** please contact an admin."

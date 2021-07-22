@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from typing import Any
 
+from cachetools import cached
+from cachetools.ttl import TTLCache
 from discord.embeds import Embed
 from discord.utils import cached_property
 
 from ..lib.redis import r
 
 
-async def ME(author: cached_property | Any):
+def ME(author: cached_property | Any):
     e = Embed()
 
     if not r.exists(f"_id_{author.id}"):
