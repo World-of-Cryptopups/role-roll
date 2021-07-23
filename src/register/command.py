@@ -23,14 +23,18 @@ def REGISTER(token: str, author: cached_property | Any):
     # fetch the true DPS upon register
     _trueDPS = getTrueDPS(_d["wallet"])
 
+    # register id to set
+    r.sadd("_registered_ids", f"_id_{author.id}")
+
     # register key
     r.hset(
         name=f"_id_{author.id}",
         mapping={
-            "wallet": _d["wallet"],
-            "type": _d["type"],
-            "verified": str(True),
-            "trueDPS": str(_trueDPS),
+            "wallet": _d["wallet"],  # get the wllaet
+            "type": _d["type"],  # get also the type
+            "verified": str(True),  # verify it
+            "trueDPS": str(_trueDPS),  # get the trueDPS
+            "avatarUrl": author.avatar_url,  # get the author profile image / avatar url
         },
     )
     return f"✅ <@!{author.id}>, You successfully registered. You can check your status with the command `>me`"

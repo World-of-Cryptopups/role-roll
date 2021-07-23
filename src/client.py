@@ -6,11 +6,14 @@ import discord
 from discord.embeds import Embed
 from discord.ext import commands
 from discord.ext.commands import Context
+from discord.message import Message
 
 from src.dps.command import DPS
 from src.me.command import ME
 from src.register.command import REGISTER
 from src.roll.command import ROLL
+
+from .lib.redis import r
 
 # CREATE A NEW CLIENT
 intents = discord.Intents.default()
@@ -21,6 +24,25 @@ client = commands.Bot(command_prefix=">", description="", intent=intents)
 @client.event
 async def on_ready():
     print("We have logged in as {0.user}".format(client))
+
+
+@client.event
+async def on_message(message: Message):
+    if message.content in [">dps", ">me"]:
+        _id = f"_id_{message.author.id}"
+        if r.exists(_id) == 0:
+            await message.channel.send(
+                "You are not currently registered. Please register with the `>register` command and try again."
+            )
+
+            return
+
+        # checks if avatar url exists or not
+        icon = r.hget(_id, "avatarUrl")
+        if not icon:
+            r.hset(_id, "avatarUrl", str(message.author.avatar_url))
+
+    await client.process_commands(message)
 
 
 @client.command()

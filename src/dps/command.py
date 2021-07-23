@@ -16,9 +16,6 @@ def DPS(author: cached_property | Any):
 
     _id = f"_id_{author.id}"
 
-    if r.exists(_id) == 0:
-        return "You are not currently registered. Please register with the `>register` command and try again."
-
     # get all keys
     d = r.hgetall(_id)
 
@@ -26,5 +23,4 @@ def DPS(author: cached_property | Any):
     if not _owner:
         return f"<@!{author.id}> Your `wallet` is not currently registered or saved. Please contact an admin to fix this issue."
 
-
-    return ROLL(_owner, author, True, d.get('trueDPS'))
+    return ROLL(_owner, author, True, d.get("trueDPS"))
