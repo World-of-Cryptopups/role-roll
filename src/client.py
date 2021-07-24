@@ -61,14 +61,16 @@ async def roll(ctx: Context, name: Optional[str]):
         await ctx.send("Please add your WAX ID to the command like: `>roll mywax.wam`")
         return
 
-    # remove spaces
-    _name = name.strip()
+    # typing style animation?
+    async with ctx.typing():
+        # remove spaces
+        _name = name.strip()
 
-    # set fetching message
-    msg: discord.Message = await ctx.send(f"Fetching DPS of **{_name}**...")
+        # set fetching message
+        msg: discord.Message = await ctx.send(f"Fetching DPS of **{_name}**...")
 
-    # execute function and get message
-    _message = ROLL(_name, ctx.author, False, None)
+        # execute function and get message
+        _message = ROLL(_name, ctx.author, False, None)
 
     # edit sent message and send it
     await msg.edit(content=f"<@!{ctx.author.id}>", embed=_message)
@@ -83,12 +85,14 @@ async def register(ctx: Context, token: Optional[str]):
         )
         return
 
-    m: discord.Message = await ctx.send(f"Registering <@!{ctx.author.id}>")
+    # typing style animation?
+    async with ctx.typing():
+        m: discord.Message = await ctx.send(f"Registering <@!{ctx.author.id}>")
 
-    # strip token
-    _token = token.strip()
+        # strip token
+        _token = token.strip()
 
-    _message = REGISTER(_token, ctx.author)
+        _message = REGISTER(_token, ctx.author)
 
     await m.edit(content=_message)
 
@@ -96,18 +100,20 @@ async def register(ctx: Context, token: Optional[str]):
 # >dps
 @client.command()
 async def dps(ctx: Context):
-    # get the author id
-    _id = ctx.author.id
+    # typing style, animation?
+    async with ctx.typing():
+        # get the author id
+        _id = ctx.author.id
 
-    # set fetching dps message
-    msg: discord.Message = await ctx.send(f"Fetching DPS stats of **<@!{_id}>**...")
+        # set fetching dps message
+        msg: discord.Message = await ctx.send(f"Fetching DPS stats of **<@!{_id}>**...")
 
-    # get the DPS
-    _message: Embed | str = DPS(ctx.author)
+        # get the DPS
+        _message: Embed | str = DPS(ctx.author)
 
-    if type(_message) == str:
-        await msg.edit(content=_message)
-        return
+        if type(_message) == str:
+            await msg.edit(content=_message)
+            return
 
     # edit sent message with the new content from DPS()
     await msg.edit(content=f"<@!{_id}>", embed=_message)
@@ -116,6 +122,8 @@ async def dps(ctx: Context):
 # >me
 @client.command()
 async def me(ctx: Context):
-    _message = ME(ctx.author)
+    # typing style, animation?
+    async with ctx.typing():
+        _message = ME(ctx.author)
 
     await ctx.send(embed=_message)
