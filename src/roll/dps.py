@@ -38,7 +38,7 @@ PUPITEMS_TRUE = "https://wax.api.atomicassets.io/atomicassets/v1/assets?owner={o
 
 
 # a special function for getting the owner's true DPS from events
-def getTrueDPS(owner: str) -> int:
+def getSeasonPassDPS(owner: str) -> int:
     resps = requester(owner, [PUPCARDS_TRUE, PUPSKINS_TRUE, PUPITEMS_TRUE])
 
     # calculate all dps

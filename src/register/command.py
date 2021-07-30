@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from discord.utils import cached_property
-from src.roll.dps import getTrueDPS
+from src.roll.dps import getSeasonPassDPS
 
 from ..lib.redis import r
 
@@ -21,7 +21,7 @@ def REGISTER(token: str, author: cached_property | Any):
     _d = r.hgetall(token)
 
     # fetch the true DPS upon register
-    _trueDPS = getTrueDPS(_d["wallet"])
+    _seasonDPS = getSeasonPassDPS(_d["wallet"])
 
     # register id to set
     r.sadd("_registered_ids", f"_id_{author.id}")
@@ -33,7 +33,7 @@ def REGISTER(token: str, author: cached_property | Any):
             "wallet": _d["wallet"],  # get the wllaet
             "type": _d["type"],  # get also the type
             "verified": str(True),  # verify it
-            "trueDPS": str(_trueDPS),  # get the trueDPS
+            "seasonDPS": str(_seasonDPS),  # get the seasonDPS
             "avatarUrl": author.avatar_url,  # get the author profile image / avatar url
         },
     )

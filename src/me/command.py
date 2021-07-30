@@ -19,7 +19,7 @@ def ME(author: cached_property | Any):
     _waxid = d["wallet"]
     _verified = d["verified"]
     _type = d["type"]
-    _trueDPS = d.get("trueDPS")
+    _seasonDPS = d.get("seasonDPS")
 
     _provider = ""
     if _type == "wax-cloud":
@@ -38,9 +38,11 @@ def ME(author: cached_property | Any):
     e.add_field(name="👥 Account Provider", value=_provider, inline=True)
     e.add_field(name=f"{_v_title} Verified", value=_verified, inline=True)
 
-    if _trueDPS:
+    if _seasonDPS:
         e.add_field(
-            name="🛡 TRUE DPS", value="**{:,}**".format(int(_trueDPS)), inline=False
+            name="🛡 SEASON PASS DPS",
+            value="**{:,}**".format(int(_seasonDPS)),
+            inline=False,
         )
 
     return e
