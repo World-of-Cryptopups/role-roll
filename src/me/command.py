@@ -33,6 +33,7 @@ def ME(author: cached_property | Any):
 
     e = Embed()
     e.title = "Profile | World of Cryptopups"
+    e.set_thumbnail(url=author.avatar_url)
     e.set_author(name=author.display_name, icon_url=author.avatar_url)
     e.add_field(name="💳 WAX Wallet", value=_waxid, inline=False)
     e.add_field(name="👥 Account Provider", value=_provider, inline=True)

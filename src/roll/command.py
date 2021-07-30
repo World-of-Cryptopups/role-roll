@@ -54,6 +54,7 @@ def ROLL(owner: str, author: cached_property | Any, auth: bool, seasonDPS: str |
     # set final message
     e = Embed(title=f"**{owner}** | DPS Calculator")
     e.set_author(name=author.display_name, icon_url=author.avatar_url)
+    e.set_thumbnail(url=author.avatar_url)
     e.add_field(
         name="🎴 Puppy Cards", value="{:,} DPS".format(puppyCardsDPS), inline=True
     )

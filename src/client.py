@@ -126,4 +126,4 @@ async def me(ctx: Context):
     async with ctx.typing():
         _message = ME(ctx.author)
 
-    await ctx.send(embed=_message)
+    await ctx.reply(embed=_message)
