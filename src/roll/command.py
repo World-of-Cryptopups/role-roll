@@ -5,34 +5,42 @@ from typing import Any
 from cachetools import TTLCache, cached
 from discord import Embed
 from discord.utils import cached_property
+from src.lib.pups import SCHEMAS
 
 from ..lib.redis import r
 from .dps import calculateDPS, calculateItemsDPS, getSeasonPassDPS
-from .request import (PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, _urls,
-                      requester)
+from .request import (
+    PUPITEMS_API,
+    PUPPYCARDS_API,
+    PUPSKINS_API,
+    _urls,
+    calculator,
+    requester,
+)
 
 
 # base dps calculation command
-# cache function response for 5 minutes, in order to avoid continous responses to the AtomicHub API
-@cached(cache=TTLCache(maxsize=128, ttl=300))
+# @cached(cache=TTLCache(maxsize=128, ttl=300))
 def ROLL(owner: str, author: cached_property | Any, auth: bool, seasonDPS: str | None):
     """
     `>roll` command
     """
 
-    resps = requester(owner, _urls)
+    resps = calculator(owner)
 
-    puppyCardsData = {}
-    pupSkinsData = {}
-    pupItemsData = {}
+    puppyCardsData = []
+    pupSkinsData = []
+    pupItemsData = []
+
+    print(resps[0]["schema"])
 
     for i in resps:
-        if i["url"] == PUPPYCARDS_API.format(owner=owner):
-            puppyCardsData = i["response"]
-        if i["url"] == PUPSKINS_API.format(owner=owner):
-            pupSkinsData = i["response"]
-        if i["url"] == PUPITEMS_API.format(owner=owner):
-            pupItemsData = i["response"]
+        if i["schema"] == SCHEMAS[1]:
+            puppyCardsData = i["values"]
+        if i["schema"] == SCHEMAS[0]:
+            pupSkinsData = i["values"]
+        if i["schema"] == SCHEMAS[2]:
+            pupItemsData = i["values"]
 
     if not puppyCardsData or not pupSkinsData or not pupItemsData:
         # if failed request, return this
@@ -42,12 +50,10 @@ def ROLL(owner: str, author: cached_property | Any, auth: bool, seasonDPS: str |
         )
 
     # calculate all dps
-    puppyCardsDPS = calculateDPS(owner, puppyCardsData["data"])
-    pupSkinsDPS = calculateDPS(owner, pupSkinsData["data"])
-    pupItemsDPS = calculateDPS(owner, pupItemsData["data"])
-    pupItemsRealDPS = calculateItemsDPS(
-        pupSkinsData["data"], pupItemsData["data"], owner
-    )
+    puppyCardsDPS = calculateDPS(owner, puppyCardsData)
+    pupSkinsDPS = calculateDPS(owner, pupSkinsData)
+    pupItemsDPS = calculateDPS(owner, pupItemsData)
+    pupItemsRealDPS = calculateItemsDPS(pupSkinsData, pupItemsData, owner)
 
     totalDPS = puppyCardsDPS + pupSkinsDPS + pupItemsRealDPS
 

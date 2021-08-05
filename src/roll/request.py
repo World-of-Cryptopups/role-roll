@@ -1,6 +1,11 @@
+import time
 from typing import List
 
 from requests import Session
+from src.lib import pups
+from src.lib.pups import SCHEMAS
+from src.lib.tinydb import db
+from tinydb.queries import where
 
 PUPSKINS_API = "https://wax.api.atomicassets.io/atomicassets/v1/assets?owner={owner}&collection_name=cryptopuppie&schema_name=pupskincards&page=1&limit=1000&order=desc&sort=asset_id"
 PUPPYCARDS_API = "https://wax.api.atomicassets.io/atomicassets/v1/assets?owner={owner}&collection_name=cryptopuppie&schema_name=puppycards&page=1&limit=1000&order=desc&sort=asset_id"
@@ -25,3 +30,25 @@ def _fetch_request(url: str, session: Session):
 def requester(owner: str, urls: List[str]):
     with Session() as session:
         return [_fetch_request(i.format(owner=owner), session) for i in urls]
+
+
+# calculates the dps from the `TinyDB` db
+def calculator(owner: str):
+    # no data (fetcher could be in its work, hope this could work though)
+    if pups.FETCHING:
+        print("waiting...")
+        time.sleep(2)
+        return calculator(owner)
+
+    # get assets
+    assets = db.table("assets")
+
+    return [
+        {
+            "schema": i,
+            "values": assets.search(
+                (where("owner") == owner) & (where("schema")["schema_name"] == i)
+            ),
+        }
+        for i in SCHEMAS
+    ]

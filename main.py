@@ -1,5 +1,7 @@
 import os
 
+from tasks.fetcher import fetch_all_data
+
 # load .envfile if in development
 devel = os.getenv("DEVEL")
 if devel:
@@ -17,6 +19,8 @@ my_secret = os.getenv("TOKEN")
 # setup logger
 setup_logger()
 
+
+fetch_all_data.start()
 
 # run bot
 client.run(my_secret)
