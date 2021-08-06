@@ -9,14 +9,8 @@ from src.lib.pups import SCHEMAS
 
 from ..lib.redis import r
 from .dps import calculateDPS, calculateItemsDPS, getSeasonPassDPS
-from .request import (
-    PUPITEMS_API,
-    PUPPYCARDS_API,
-    PUPSKINS_API,
-    _urls,
-    calculator,
-    requester,
-)
+from .request import (PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, _urls,
+                      calculator, requester)
 
 
 # base dps calculation command
@@ -40,12 +34,12 @@ def ROLL(owner: str, author: cached_property | Any, auth: bool, seasonDPS: str |
         if i["schema"] == SCHEMAS[2]:
             pupItemsData = i["values"]
 
-    if not puppyCardsData or not pupSkinsData or not pupItemsData:
-        # if failed request, return this
-        return Embed(
-            title="Request Failed",
-            description="Failed to fetch! Is your WAX ID correct?",
-        )
+    # if not puppyCardsData or not pupSkinsData or not pupItemsData:
+    #     # if failed request, return this
+    #     return Embed(
+    #         title="Request Failed",
+    #         description="Failed to fetch! Is your WAX ID correct?",
+    #     )
 
     # calculate all dps
     puppyCardsDPS = calculateDPS(owner, puppyCardsData)

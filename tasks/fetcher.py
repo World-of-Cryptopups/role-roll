@@ -22,20 +22,26 @@ async def fetch_all_data():
         for s in SCHEMAS:
             # count start at 1
             for i in itertools.count(1):
-                r = session.get(base_url.format(schema=s, page=i)).json()
+                # handle JsonDecode errors
+                try:
+                    d = session.get(base_url.format(schema=s, page=i))
+                    r = d.json()
+                except Exception:
+                    print(d.headers)
+                    continue
 
                 if len(r["data"]) == 0:
                     break
 
-                if r:
-                    dlDB.insert_multiple(r["data"])
+                dlDB.insert_multiple(r["data"])
 
             print(f"[FETCHER] Done with {s}")
 
-    # drop first the existing datas
-    db.drop_tables()
+    with db as d:
+        # drop first the existing datas
+        d.drop_tables()
 
-    # insert datas to main db
-    db.insert_multiple(dlDB.all())
+        # insert datas to main db
+        d.insert_multiple(dlDB.all())
 
     print("[FETCHER] Task done!")
