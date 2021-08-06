@@ -2,6 +2,7 @@ import itertools
 
 import requests
 from discord.ext import tasks
+from src.client import client
 from src.lib.pups import SCHEMAS
 from src.lib.tinydb import db
 from tinydb.database import TinyDB
@@ -43,3 +44,8 @@ async def fetch_all_data():
         db.insert_multiple(dlDB.all())
 
     print("[FETCHER] Task done!")
+
+
+@fetch_all_data.before_loop
+async def wait_for_client():
+    await client.wait_until_ready()
