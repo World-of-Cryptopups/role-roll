@@ -40,13 +40,11 @@ def calculator(owner: str):
         time.sleep(2)
         return calculator(owner)
 
-    # get assets
-    assets = db.table("assets")
 
     return [
         {
             "schema": i,
-            "values": assets.search(
+            "values": db.search(
                 (where("owner") == owner) & (where("schema")["schema_name"] == i)
             ),
         }

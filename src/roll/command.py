@@ -32,8 +32,6 @@ def ROLL(owner: str, author: cached_property | Any, auth: bool, seasonDPS: str |
     pupSkinsData = []
     pupItemsData = []
 
-    print(resps[0]["schema"])
-
     for i in resps:
         if i["schema"] == SCHEMAS[1]:
             puppyCardsData = i["values"]

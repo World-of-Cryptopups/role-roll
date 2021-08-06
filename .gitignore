@@ -134,3 +134,4 @@ dmypy.json
 
 # tinydb db
 dps.json
+dps-download.json
