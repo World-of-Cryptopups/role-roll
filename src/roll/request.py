@@ -2,7 +2,6 @@ import time
 from typing import List
 
 from requests import Session
-from src.lib import pups
 from src.lib.pups import SCHEMAS
 from src.lib.tinydb import db
 from tinydb.queries import where
@@ -34,12 +33,6 @@ def requester(owner: str, urls: List[str]):
 
 # calculates the dps from the `TinyDB` db
 def calculator(owner: str):
-    # no data (fetcher could be in its work, hope this could work though)
-    if pups.FETCHING:
-        print("waiting...")
-        time.sleep(2)
-        return calculator(owner)
-
 
     return [
         {

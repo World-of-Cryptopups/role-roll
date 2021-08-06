@@ -13,8 +13,6 @@ base_url = "https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_na
 
 @tasks.loop(minutes=5)
 async def fetch_all_data():
-    pups.FETCHING = True
-
     # first drop the existing downloaded
     dlDB.drop_tables()
 
@@ -33,14 +31,11 @@ async def fetch_all_data():
                     dlDB.insert_multiple(r["data"])
 
             print(f"[FETCHER] Done with {s}")
-            
-            
+
     # drop first the existing datas
     db.drop_tables()
 
     # insert datas to main db
     db.insert_multiple(dlDB.all())
-
-    pups.FETCHING = False
 
     print("[FETCHER] Task done!")
