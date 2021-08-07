@@ -6,11 +6,17 @@ from cachetools import TTLCache, cached
 from discord import Embed
 from discord.utils import cached_property
 from src.lib.pups import SCHEMAS
+from src.lib.redis import r
 
-from ..lib.redis import r
 from .dps import calculateDPS, calculateItemsDPS, getSeasonPassDPS
-from .request import (PUPITEMS_API, PUPPYCARDS_API, PUPSKINS_API, _urls,
-                      calculator, requester)
+from .request import (
+    PUPITEMS_API,
+    PUPPYCARDS_API,
+    PUPSKINS_API,
+    _urls,
+    calculator,
+    requester,
+)
 
 
 # base dps calculation command

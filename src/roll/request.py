@@ -33,7 +33,6 @@ def requester(owner: str, urls: List[str]):
 
 # calculates the dps from the `TinyDB` db
 def calculator(owner: str):
-
     return [
         {
             "schema": i,
