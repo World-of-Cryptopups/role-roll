@@ -17,8 +17,8 @@ base_url = "https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_na
 async def _fetcher(s: str, i: int, session: ClientSession, xdb: TinyDB):
     async with session.get(base_url.format(schema=s, page=i)) as resp:
         d = await resp.json()
-        
-        if len(d['data']) == 0:
+
+        if len(d["data"]) == 0:
             return True
 
         xdb.insert_multiple(d["data"])
@@ -63,57 +63,58 @@ async def _tasker():
 
 async def fetch_all_data():
     # wait for bot to be ready
-    await client.wait_until_ready()
+    # await client.wait_until_ready()
 
-    while not client.is_closed():
-        # print("[FETCHER] Starting to fetch all datas again...")
+    # while not client.is_closed():
+    # print("[FETCHER] Starting to fetch all datas again...")
 
-        await client.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.listening, name="fetching..."
-            )
-        )
+    # await client.change_presence(
+    #     activity=discord.Activity(
+    #         type=discord.ActivityType.listening, name="fetching..."
+    #     )
+    # )
 
-        # with TinyDB("dps-download.json") as dlDB:
-        #     # first drop the existing downloaded
-        #     dlDB.drop_tables()
+    # with TinyDB("dps-download.json") as dlDB:
+    #     # first drop the existing downloaded
+    #     dlDB.drop_tables()
 
-        #     with requests.Session() as session:
-        #         for s in SCHEMAS:
-        #             # count start at 1
-        #             for i in itertools.count(1):
-        #                 # handle JsonDecode errors
-        #                 try:
-        #                     d = session.get(base_url.format(schema=s, page=i))
-        #                     r = d.json()
-        #                 except Exception as e:
-        #                     print(f"[error!] schema: {s}, page: {i}, error: {e}")
-        #                     continue
+    #     with requests.Session() as session:
+    #         for s in SCHEMAS:
+    #             # count start at 1
+    #             for i in itertools.count(1):
+    #                 # handle JsonDecode errors
+    #                 try:
+    #                     d = session.get(base_url.format(schema=s, page=i))
+    #                     r = d.json()
+    #                 except Exception as e:
+    #                     print(f"[error!] schema: {s}, page: {i}, error: {e}")
+    #                     continue
 
-        #                 if len(r["data"]) == 0:
-        #                     break
+    #                 if len(r["data"]) == 0:
+    #                     break
 
-        #                 dlDB.insert_multiple(r["data"])
-        #                 print(f"[FETCHER] -> downloaded | schema: {s}, page: {i}")
+    #                 dlDB.insert_multiple(r["data"])
+    #                 print(f"[FETCHER] -> downloaded | schema: {s}, page: {i}")
 
-        #             print(f"[FETCHER] Done with {s}")
+    #             print(f"[FETCHER] Done with {s}")
 
-        #     # drop first the existing datas
-        #     db.drop_tables()
+    #     # drop first the existing datas
+    #     db.drop_tables()
 
-        #     # insert datas to main db
-        #     db.insert_multiple(dlDB.all())
+    #     # insert datas to main db
+    #     db.insert_multiple(dlDB.all())
 
+    while True:
         await _tasker()
 
         # print("[FETCHER] Task done!")
 
         # change presense to wathing
-        await client.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.watching, name="World of Cryptopups"
-            )
-        )
+        # await client.change_presence(
+        #     activity=discord.Activity(
+        #         type=discord.ActivityType.watching, name="World of Cryptopups"
+        #     )
+        # )
 
         # run again after 5 minutes
         await asyncio.sleep(300)

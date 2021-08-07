@@ -1,6 +1,6 @@
 import asyncio
 import os
-from threading import Thread
+import time
 
 # load .envfile if in development
 devel = os.getenv("DEVEL")
@@ -20,7 +20,9 @@ my_secret = os.getenv("TOKEN")
 # setup logger
 setup_logger()
 
-client.loop.create_task(fetch_all_data())
+# client.loop.create_task(fetch_all_data())
+time.sleep(10)
+
 
 # run bot
 client.run(my_secret)
